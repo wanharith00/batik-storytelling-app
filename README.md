@@ -1,12 +1,18 @@
-# 🌺 Malaysian Batik Storytelling Web App
+# 🌸 Malaysian Batik Storyteller
+
+An AI-powered web application that detects and explains traditional Malaysian batik patterns with cultural storytelling.
+
+## ✨ Features
+
+- **AI Pattern Recognition**: Detects Bunga Raya and Geometric batik patterns using YOLOv8
+- **Multilingual Support**: English, Malay, and Chinese languages
+- **Cultural Storytelling**: Detailed explanations of pattern meanings and origins
+- **Audio Narration**: Listen to stories with text-to-speech
+- **User-Friendly Interface**: Clean, readable design with Poppins font
 
 ## 🚀 Quick Start
 
-### Method 1: One-Click Launch (Easiest)
-1. Double-click `run_app.bat`
-2. Wait for app to load
-3. Open browser to: http://localhost:8501
-
-### Method 2: Manual Start
-1. Open Anaconda Prompt
-2. Navigate to project:
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/malaysian-batik-app.git
+cd malaysian-batik-app
