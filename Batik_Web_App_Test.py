@@ -1096,81 +1096,81 @@ with col_right:
                         del st.session_state[key]
                 st.rerun()
         with action_col2:
-            # Save Report button
-            if st.button("💾 Save Full Report", use_container_width=True):
-                try:
-                    # Create report data
-                    report_data = {
-                        "pattern_name": st.session_state.pattern_name,
-                        "is_batik": not st.session_state.not_batik,
-                        "confidence": float(st.session_state.confidence),
-                        "model_used": st.session_state.model_type,
-                        "language": st.session_state.selected_language,
-                        "story": st.session_state.current_story,
-                        "timestamp": datetime.datetime.now().isoformat(),
-                        "image_filename": st.session_state.get('image_filename', 'sample_image'),
-                        "model_path": r"s\harith\Desktop\Batik_Classifier_App\runs\classify\batik_75epochsv2\weights\best.pt"
-                    }
-                    
-                    # Save JSON report
-                    report_filename = f"batik_ai_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-                    with open(report_filename, 'w', encoding='utf-8') as f:
-                        json.dump(report_data, f, indent=2, ensure_ascii=False)
-                    
-                    # Save text report
-                    text_filename = f"batik_ai_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-                    with open(text_filename, 'w', encoding='utf-8') as f:
-                        f.write("="*50 + "\n")
-                        f.write("BATIK AI CULTURAL STORY REPORT\n")
-                        f.write("="*50 + "\n\n")
-                        f.write(f"Pattern: {st.session_state.pattern_name}\n")
-                        f.write(f"Is Batik: {not st.session_state.not_batik}\n")
-                        f.write(f"Confidence: {st.session_state.confidence:.1%}\n")
-                        f.write(f"AI Model: {st.session_state.model_type}\n")
-                        f.write(f"Language: {st.session_state.selected_language}\n")
-                        f.write(f"Model Path: s\\harith\\Desktop\\Batik_Classifier_App\\runs\\classify\\batik_75epochsv2\\weights\\best.pt\n")
-                        f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                        f.write("\n" + "="*50 + "\n")
-                        f.write("CULTURAL STORY\n")
-                        f.write("="*50 + "\n\n")
-                        f.write(st.session_state.current_story)
-                    
-                    # Read files for download
-                    with open(text_filename, 'r', encoding='utf-8') as f:
-                        text_report = f.read()
-                    
-                    st.success("✅ Report saved successfully!")
-                    
-                    # Show save location
-                    st.markdown('<div class="save-location">', unsafe_allow_html=True)
-                    st.markdown("### 📍 Report Saved Successfully")
-                    st.write(f"**Files created in:** `{os.getcwd()}`")
-                    st.write(f"**Files:**")
-                    st.write(f"1. `{text_filename}`")
-                    st.write(f"2. `{report_filename}`")
-                    st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    # Provide download buttons
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.download_button(
-                            label="📥 Download TXT Report",
-                            data=text_report,
-                            file_name=text_filename,
-                            mime="text/plain",
-                            use_container_width=True
-                        )
-                    with col2:
-                        st.download_button(
-                            label="📥 Download JSON Report",
-                            data=json.dumps(report_data, indent=2, ensure_ascii=False),
-                            file_name=report_filename,
-                            mime="application/json",
-                            use_container_width=True
-                        )
-                    
-                except Exception as e:
-                    st.error(f"Error saving report: {str(e)}")
+           # Save Report button
+if st.button("💾 Save Full Report", use_container_width=True):
+    try:
+        # Create report data
+        report_data = {
+            "pattern_name": st.session_state.pattern_name,
+            "is_batik": not st.session_state.not_batik,
+            "confidence": float(st.session_state.confidence),
+            "model_used": st.session_state.model_type,
+            "language": st.session_state.selected_language,
+            "story": st.session_state.current_story,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "image_filename": st.session_state.get('image_filename', 'sample_image'),
+            "model_path": r"s\harith\Desktop\Batik_Classifier_App\runs\classify\batik_75epochsv2\weights\best.pt"
+        }
+        
+        # Save JSON report
+        report_filename = f"batik_ai_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        with open(report_filename, 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, indent=2, ensure_ascii=False)
+        
+        # Save text report
+        text_filename = f"batik_ai_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        with open(text_filename, 'w', encoding='utf-8') as f:
+            f.write("="*50 + "\n")
+            f.write("BATIK AI CULTURAL STORY REPORT\n")
+            f.write("="*50 + "\n\n")
+            f.write(f"Pattern: {st.session_state.pattern_name}\n")
+            f.write(f"Is Batik: {not st.session_state.not_batik}\n")
+            f.write(f"Confidence: {st.session_state.confidence:.1%}\n")
+            f.write(f"AI Model: {st.session_state.model_type}\n")
+            f.write(f"Language: {st.session_state.selected_language}\n")
+            f.write(f"Model Path: s\\harith\\Desktop\\Batik_Classifier_App\\runs\\classify\\batik_75epochsv2\\weights\\best.pt\n")
+            f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("\n" + "="*50 + "\n")
+            f.write("CULTURAL STORY\n")
+            f.write("="*50 + "\n\n")
+            f.write(st.session_state.current_story)
+        
+        # Read files for download
+        with open(text_filename, 'r', encoding='utf-8') as f:
+            text_report = f.read()
+        
+        st.success("✅ Report saved successfully!")
+        
+        # Show save location
+        st.markdown('<div class="save-location">', unsafe_allow_html=True)
+        st.markdown("### 📍 Report Saved Successfully")
+        st.write(f"**Files created in:** `{os.getcwd()}`")
+        st.write(f"**Files:**")
+        st.write(f"1. `{text_filename}`")
+        st.write(f"2. `{report_filename}`")
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Provide download buttons
+        col1, col2 = st.columns(2)
+        with col1:
+            st.download_button(
+                label="📥 Download TXT Report",
+                data=text_report,
+                file_name=text_filename,
+                mime="text/plain",
+                use_container_width=True
+            )
+        with col2:
+            st.download_button(
+                label="📥 Download JSON Report",
+                data=json.dumps(report_data, indent=2, ensure_ascii=False),
+                file_name=report_filename,
+                mime="application/json",
+                use_container_width=True
+            )
+        
+    except Exception as e:
+        st.error(f"Error saving report: {str(e)}")
     
     else:
         # Show instructions when no analysis done
