@@ -63,7 +63,7 @@ def get_batik_database():
             },
             "ar": {
                 "name": "نمط باتيك بونغا رايا",
-                "story": "نمط بونغا رايا (الهيبسكس) هو نمط بارز وذو أهمية ثقافية في باتيك ماليزيا. باعتباره الزهرة الوطنية لماليزيا، فهو يمثل حب الأمة وتراثها الغني. غالبًا ما ترمز البتلات الخمس إلى المبادئ الخمسة لـ \"ركون نيجارا\" (المبادئ الوطنية الماليزية)، مما يمثل الوحدة بين السكان المتنوعين.",
+                "story": "نمط بونغا رايا (الهيبسكس) هو نمط بارز وذو أهمية ثقافية في باتيك ماليزيا. باعتباره الزهرة الوطنية لماليزيا، فهو يمثل حب الأمة وتراثها الغني. غالبًا ما ترمز البتلات الخمس إلى المبادئ الخمسة لـ \"ركون نيجارا\" (المبادئ الوطنية الماليزية), مما يمثل الوحدة بين السكان المتنوعين.",
                 "meaning": "الهوية الوطنية، الوحدة، الحب، النمو، الحيوية",
                 "origin": "ماليزيا (ولايات مختلفة بما في ذلك كلانتان، ترغكانو)",
                 "cultural_significance": "الزهرة الوطنية لماليزيا، رمز الوحدة والفخر",
@@ -83,8 +83,8 @@ def get_batik_database():
             },
             "ko": {
                 "name": "붕가 라야(히비스커스) 바틱 패턴",
-                "story": "붕가 라야(히비스커스) 모티프는 말레이시아 바틱에서 두드러지고 문화적으로 중요한 패턴입니다。말레이시아의 국화로서 국가와 그 풍부한 유산에 대한 사랑을 나타냅니다。다섯 개의 꽃잎은 종종 루쿤 네가라(말레이시아 국가 원칙)의 다섯 가지 원칙을 상징하며 다양한 인구 사이의 통합을 나타냅니다。",
-                "meaning": "국가 정체성, 통합, 사랑, 성장, 활력",
+                "story": "붕가 라야(히비스커스) 모티프는 말레이시아 바틱에서 두드러지고 문화적으로 중요한 패턴입니다。말레이シア의 국화로서 국가와 그 풍부한 유산에 대한 사랑을 나타냅니다。다섯 개의 꽃잎은 종종 루쿤 네가라(말레이시아 국가 원칙)의 다섯 가지 원칙을 상징하며 다양한 인구 사이의 통합을 나타냅니다。",
+                "meaning": "국가 정체성、통합、사랑、성장、활력",
                 "origin": "말레이시아(클란탄, 테렝가누 등을 포함한 여러 주)",
                 "cultural_significance": "말레이시아의 국화, 통합과 자부심의 상징",
                 "home_context": "많은 말레이시아 가정에서 히비스커스(붕가 라야) 나무는 친숙하고 의미 있는 존재입니다。일반적으로 가정 정원, 울타리를 따라, 베란다 근처 또는 마을 집 옆에 심어집니다。이 나무는 일반적으로 매우 높게 자라지 않아 유지 관리가 쉽습니다。",
@@ -268,18 +268,21 @@ def get_story_for_pattern(pattern_name, language):
 # ============ YOLOv8 MODEL LOADING ============
 @st.cache_resource
 def load_yolo_model():
-    """Load YOLOv8 model from your path"""
+    """Load YOLOv8 model from your specific path"""
     try:
-        # Your model path from the image
+        # UPDATED: Your specific model path
         model_path = r"s\harith\Desktop\Batik_Classifier_App\runs\classify\batik_75epochsv2\weights\best.pt"
         
-        # Alternative paths if the above doesn't work
+        # Alternative paths in case the main path doesn't work
         alternative_paths = [
-            model_path,
-            "batik_75epochsv2/weights/best.pt",
-            "runs/classify/batik_75epochsv2/weights/best.pt",
-            "./batik_75epochsv2/weights/best.pt",
-            "./runs/classify/batik_75epochsv2/weights/best.pt"
+            model_path,  # Your original path
+            "best.pt",  # Try in current directory
+            "models/best.pt",  # Try in models folder
+            "./best.pt",  # Relative path
+            "batik_75epochsv2/weights/best.pt",  # Relative path
+            "./batik_75epochsv2/weights/best.pt",  # Another relative path
+            "weights/best.pt",  # Simple path
+            "batik_model.pt"  # Generic name
         ]
         
         loaded_model = None
@@ -287,21 +290,25 @@ def load_yolo_model():
         
         for path in alternative_paths:
             try:
+                # For Windows paths, check if file exists
                 if os.path.exists(path):
-                    print(f"Loading model from: {path}")
+                    print(f"✅ Loading model from: {path}")
                     loaded_model = YOLO(path)
                     loaded_path = path
                     print(f"✅ Model loaded successfully from: {path}")
                     break
                 else:
-                    print(f"Model not found at: {path}")
+                    print(f"⚠️ Model not found at: {path}")
             except Exception as e:
-                print(f"Error loading from {path}: {e}")
+                print(f"❌ Error loading from {path}: {e}")
                 continue
         
         if loaded_model is None:
-            print("❌ Could not load model from any path")
-            return None, None
+            # Try to load from cloud or create demo model
+            print("⚠️ Could not load model from any path. Creating a dummy model for testing.")
+            # Create a simple model for testing
+            loaded_model = None  # Will trigger fallback mode
+            loaded_path = "DEMO_MODE: Model file not found"
         
         return loaded_model, loaded_path
     except Exception as e:
@@ -311,6 +318,11 @@ def load_yolo_model():
 def classify_with_yolo(model, image_path):
     """Classify image using YOLOv8 model"""
     try:
+        # Check if model is valid
+        if model is None:
+            print("⚠️ Model is None, using fallback")
+            return None
+        
         # Run prediction
         results = model.predict(image_path, verbose=False)
         
@@ -403,14 +415,14 @@ def classify_image_with_fallback(image_data, image_filename):
             'primary_class': 'corak batik bunga raya',
             'confidence': random.uniform(0.85, 0.95),
             'is_batik': True,
-            'model_type': 'Simple'
+            'model_type': 'Simple Fallback'
         }
     elif 'geometri' in filename_lower or 'geo' in filename_lower or 'shape' in filename_lower:
         return {
             'primary_class': 'corak batik geometri',
             'confidence': random.uniform(0.80, 0.90),
             'is_batik': True,
-            'model_type': 'Simple'
+            'model_type': 'Simple Fallback'
         }
     else:
         # Random assignment
@@ -419,14 +431,14 @@ def classify_image_with_fallback(image_data, image_filename):
                 'primary_class': 'corak batik bunga raya',
                 'confidence': random.uniform(0.60, 0.75),
                 'is_batik': True,
-                'model_type': 'Simple'
+                'model_type': 'Simple Fallback'
             }
         else:
             return {
                 'primary_class': 'not batik pattern',
                 'confidence': random.uniform(0.30, 0.50),
                 'is_batik': False,
-                'model_type': 'Simple'
+                'model_type': 'Simple Fallback'
             }
 
 # Initialize ALL session state variables
@@ -460,6 +472,8 @@ if 'story_data' not in st.session_state:
     st.session_state.story_data = {}
 if 'model_type' not in st.session_state:
     st.session_state.model_type = "Not Loaded"
+if 'detection_result' not in st.session_state:
+    st.session_state.detection_result = None
 
 # Custom CSS - UPDATED with non-batik styles
 st.markdown("""
@@ -680,6 +694,8 @@ if not YOLO_AVAILABLE:
     st.warning("⚠️ YOLOv8 not available. Running in fallback mode.")
 elif st.session_state.get('model_type') == "YOLOv8":
     st.success("✅ YOLOv8 Model Loaded Successfully!")
+elif st.session_state.get('model_type') == "Simple Fallback":
+    st.info("ℹ️ Running in Simple Fallback Mode")
 
 # Sidebar - Settings
 with st.sidebar:
@@ -717,7 +733,8 @@ with st.sidebar:
     st.markdown('<div class="section-header">🤖 AI Model Info</div>', unsafe_allow_html=True)
     if YOLO_AVAILABLE:
         st.success("YOLOv8 Available")
-        st.write("**Model:** batik_75epochsv2")
+        st.write("**Model Path:**")
+        st.code(r"s\harith\Desktop\Batik_Classifier_App\runs\classify\batik_75epochsv2\weights\best.pt")
         st.write("**Epochs:** 75")
         st.write("**Classes:** Bunga Raya, Geometric")
     else:
@@ -1091,7 +1108,8 @@ with col_right:
                         "language": st.session_state.selected_language,
                         "story": st.session_state.current_story,
                         "timestamp": datetime.datetime.now().isoformat(),
-                        "image_filename": st.session_state.get('image_filename', 'sample_image')
+                        "image_filename": st.session_state.get('image_filename', 'sample_image'),
+                        "model_path": r"s\harith\Desktop\Batik_Classifier_App\runs\classify\batik_75epochsv2\weights\best.pt"
                     }
                     
                     # Save JSON report
@@ -1110,82 +1128,8 @@ with col_right:
                         f.write(f"Confidence: {st.session_state.confidence:.1%}\n")
                         f.write(f"AI Model: {st.session_state.model_type}\n")
                         f.write(f"Language: {st.session_state.selected_language}\n")
+                        f.write(f"Model Path: s\\harith\\Desktop\\Batik_Classifier_App\\runs\\classify\\batik_75epochsv2\\weights\\best.pt\n")
                         f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                         f.write("\n" + "="*50 + "\n")
                         f.write("CULTURAL STORY\n")
-                        f.write("="*50 + "\n\n")
-                        f.write(st.session_state.current_story)
-                    
-                    # Read files for download
-                    with open(text_filename, 'r', encoding='utf-8') as f:
-                        text_report = f.read()
-                    
-                    st.success("✅ Report saved successfully!")
-                    
-                    # Show save location
-                    st.markdown('<div class="save-location">', unsafe_allow_html=True)
-                    st.markdown("### 📍 Report Saved Successfully")
-                    st.write(f"**Files created in:** `{os.getcwd()}`")
-                    st.write(f"**Files:**")
-                    st.write(f"1. `{text_filename}`")
-                    st.write(f"2. `{report_filename}`")
-                    st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    # Provide download buttons
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.download_button(
-                            label="📥 Download TXT Report",
-                            data=text_report,
-                            file_name=text_filename,
-                            mime="text/plain",
-                            use_container_width=True
-                        )
-                    with col2:
-                        st.download_button(
-                            label="📥 Download JSON Report",
-                            data=json.dumps(report_data, indent=2, ensure_ascii=False),
-                            file_name=report_filename,
-                            mime="application/json",
-                            use_container_width=True
-                        )
-                    
-                except Exception as e:
-                    st.error(f"Error saving report: {str(e)}")
-    
-    else:
-        # Show instructions when no analysis done
-        st.info("👈 **Upload an image or use sample images to begin analysis**")
-        
-        # Show features - WHITE HEADER
-        st.markdown('<div class="features-header">✨ What You\'ll Get:</div>', unsafe_allow_html=True)
-        
-        features = [
-            {"icon": "🤖", "title": "YOLOv8 AI Detection", "desc": "Advanced pattern recognition using your trained model"},
-            {"icon": "🎨", "title": "Pattern Classification", "desc": "Detects Bunga Raya, Geometric, or Non-Batik patterns"},
-            {"icon": "📚", "title": "Complete Cultural Stories", "desc": "Full narratives from original database in 7 languages"},
-            {"icon": "❌", "title": "Non-Batik Detection", "desc": "Identifies images that are not trained batik patterns"},
-            {"icon": "🔊", "title": "Audio Narration", "desc": "Listen to stories with text-to-speech"},
-            {"icon": "💾", "title": "AI Report Export", "desc": "Save detailed reports with AI analysis"}
-        ]
-        
-        cols = st.columns(2)
-        for idx, feature in enumerate(features):
-            with cols[idx % 2]:
-                st.markdown(f"""
-                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 10px; margin: 5px 0;">
-                    <div style="font-size: 1.5rem; color: #4ECDC4;">{feature['icon']}</div>
-                    <strong style="color: #333;">{feature['title']}</strong><br>
-                    <small style="color: #666;">{feature['desc']}</small>
-                </div>
-                """, unsafe_allow_html=True)
-
-# Footer - WHITE TEXT
-st.divider()
-st.markdown("""
-<div style="text-align: center; color: white; padding: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
-    <p>🌺 <strong>Malaysian Batik AI Recognition System</strong> | Version 4.0</p>
-    <p>🤖 YOLOv8 Model | 🎨 Complete Database | ❌ Non-Batik Detection | 🌍 7 Languages</p>
-    <p>📧 Contact: ai.culture@batik.edu.my | 📱 +60 12-345 6789</p>
-</div>
-""", unsafe_allow_html=True)
+                        f.write("="*50 + "\n\n
