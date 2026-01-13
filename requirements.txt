@@ -1,6 +1,10 @@
-streamlit>=1.28.0
-Pillow>=10.4.0
-opencv-python-headless>=4.10.0  # Try headless version for better compatibility
-gtts>=2.5.4
-numpy>=2.0.0
-pandas>=2.2.0
+streamlit==1.28.0
+Pillow==10.3.0
+opencv-python==4.10.0.84
+ultralytics==8.2.0
+torch==2.3.0
+torchvision==0.18.0
+transformers==4.40.0
+gtts==2.5.4
+numpy==1.26.4
+pandas==2.2.2
