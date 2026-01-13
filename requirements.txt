@@ -1,0 +1,5 @@
+streamlit==1.28.0
+Pillow>=10.0.0
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==2.3.0
+torchvision==0.18.0
