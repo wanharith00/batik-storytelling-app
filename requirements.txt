@@ -1,5 +1,7 @@
 streamlit==1.28.0
-Pillow>=10.0.0
---find-links https://download.pytorch.org/whl/torch_stable.html
-torch==2.3.0
-torchvision==0.18.0
+Pillow==10.3.0  # Updated from 10.1.0 to a more compatible version
+torch>=2.3.0    # Updated to version compatible with newer Python
+torchvision>=0.18.0
+transformers>=4.40.0
+sentencepiece>=0.2.0
+accelerate>=0.30.0
