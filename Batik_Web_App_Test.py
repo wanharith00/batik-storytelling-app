@@ -1132,4 +1132,80 @@ with col_right:
                         f.write(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                         f.write("\n" + "="*50 + "\n")
                         f.write("CULTURAL STORY\n")
-                        f.write("="*50 + "\n\n
+                        f.write("="*50 + "\n\n")
+                        f.write(st.session_state.current_story)
+                    
+                    # Read files for download
+                    with open(text_filename, 'r', encoding='utf-8') as f:
+                        text_report = f.read()
+                    
+                    st.success("✅ Report saved successfully!")
+                    
+                    # Show save location
+                    st.markdown('<div class="save-location">', unsafe_allow_html=True)
+                    st.markdown("### 📍 Report Saved Successfully")
+                    st.write(f"**Files created in:** `{os.getcwd()}`")
+                    st.write(f"**Files:**")
+                    st.write(f"1. `{text_filename}`")
+                    st.write(f"2. `{report_filename}`")
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    # Provide download buttons
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.download_button(
+                            label="📥 Download TXT Report",
+                            data=text_report,
+                            file_name=text_filename,
+                            mime="text/plain",
+                            use_container_width=True
+                        )
+                    with col2:
+                        st.download_button(
+                            label="📥 Download JSON Report",
+                            data=json.dumps(report_data, indent=2, ensure_ascii=False),
+                            file_name=report_filename,
+                            mime="application/json",
+                            use_container_width=True
+                        )
+                    
+                except Exception as e:
+                    st.error(f"Error saving report: {str(e)}")
+    
+    else:
+        # Show instructions when no analysis done
+        st.info("👈 **Upload an image or use sample images to begin analysis**")
+        
+        # Show features - WHITE HEADER
+        st.markdown('<div class="features-header">✨ What You\'ll Get:</div>', unsafe_allow_html=True)
+        
+        features = [
+            {"icon": "🤖", "title": "YOLOv8 AI Detection", "desc": "Advanced pattern recognition using your trained model"},
+            {"icon": "🎨", "title": "Pattern Classification", "desc": "Detects Bunga Raya, Geometric, or Non-Batik patterns"},
+            {"icon": "📚", "title": "Complete Cultural Stories", "desc": "Full narratives from original database in 7 languages"},
+            {"icon": "❌", "title": "Non-Batik Detection", "desc": "Identifies images that are not trained batik patterns"},
+            {"icon": "🔊", "title": "Audio Narration", "desc": "Listen to stories with text-to-speech"},
+            {"icon": "💾", "title": "AI Report Export", "desc": "Save detailed reports with AI analysis"}
+        ]
+        
+        cols = st.columns(2)
+        for idx, feature in enumerate(features):
+            with cols[idx % 2]:
+                st.markdown(f"""
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 10px; margin: 5px 0;">
+                    <div style="font-size: 1.5rem; color: #4ECDC4;">{feature['icon']}</div>
+                    <strong style="color: #333;">{feature['title']}</strong><br>
+                    <small style="color: #666;">{feature['desc']}</small>
+                </div>
+                """, unsafe_allow_html=True)
+
+# Footer - WHITE TEXT
+st.divider()
+st.markdown("""
+<div style="text-align: center; color: white; padding: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+    <p>🌺 <strong>Malaysian Batik AI Recognition System</strong> | Version 4.0</p>
+    <p>🤖 YOLOv8 Model | 🎨 Complete Database | ❌ Non-Batik Detection | 🌍 7 Languages</p>
+    <p>📧 Contact: ai.culture@batik.edu.my | 📱 +60 12-345 6789</p>
+    <p>📍 Model Path: s\\harith\\Desktop\\Batik_Classifier_App\\runs\\classify\\batik_75epochsv2\\weights\\best.pt</p>
+</div>
+""", unsafe_allow_html=True)
